@@ -18,3 +18,12 @@
 
 
 
+// fat arrow function
+// fat arrow function is a more concise syntax for writing functions
+// it is also called arrow function
+
+// let fuc = (n1 ,n2) => {
+//     return n1 * n2;
+// }
+
+// console.log(fuc( 10 ,20)); // Output: 15
