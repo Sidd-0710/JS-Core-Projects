@@ -58,7 +58,7 @@ function sum(...args) {
 // sum(1, 2, 3, 4, 5); // Output: [1, 2, 3, 4, 5]
 
 
-// <------ immediately invoked function expression (IIFE) ------->
+// <------ First class Function ------->
 
 
 function shout(msg) {
@@ -79,4 +79,16 @@ return x * y;
 }
 let double = createMultiplier(2);
 console.log(double(8)); // 16
+
+// <------ Closures ------->
+
+
+function abcd(){
+    let a = 10;
+    return function() {
+        console.log(a);
+    }
+}
+
+
 
