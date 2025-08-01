@@ -55,10 +55,28 @@ function sum(...args) {
     console.log(args); // Output: [1, 2, 3, 4, 5]
 };
 
-sum(1, 2, 3, 4, 5); // Output: [1, 2, 3, 4, 5]
+// sum(1, 2, 3, 4, 5); // Output: [1, 2, 3, 4, 5]
 
 
+// <------ immediately invoked function expression (IIFE) ------->
 
-// <------ Spread operator ------->
 
+function shout(msg) {
+return msg.toUpperCase();
+}
+function processMessage(fn) {
+console.log(fn("hello"));
+}
+// processMessage(shout);
+
+
+// <------ Higher-order functions ------->
+
+function createMultiplier(x) {
+return function (y) {
+return x * y;
+};
+}
+let double = createMultiplier(2);
+console.log(double(8)); // 16
 
