@@ -27,3 +27,28 @@
 // }
 
 // console.log(fuc( 10 ,20)); // Output: 15
+
+
+
+// <------ parameter and arguments ------->
+
+// function Gandmasti (name){
+//     console.log(`${name} is a good boy`);
+// }
+// Gandmasti("Rohit"); // Output: Rohit
+// Gandmasti ("ZAID"); // Output: zaid is good boy
+
+
+// <------ Default parameters ------->
+
+
+function add(v1 = 0 ,v2 = 0){
+    return v1 + v2;
+}
+console.log(add()); // Output: 0
+console.log(add(5)); // Output: 5
+console.log(add(5, 10)); // Output: 15
+
+// <------ Rest parameters ------->
+
+
