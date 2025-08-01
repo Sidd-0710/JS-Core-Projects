@@ -45,10 +45,20 @@
 function add(v1 = 0 ,v2 = 0){
     return v1 + v2;
 }
-console.log(add()); // Output: 0
-console.log(add(5)); // Output: 5
-console.log(add(5, 10)); // Output: 15
+// console.log(add()); // Output: 0
+// console.log(add(5)); // Output: 5
+// console.log(add(5, 10)); // Output: 15
 
 // <------ Rest parameters ------->
+
+function sum(...args) {
+    console.log(args); // Output: [1, 2, 3, 4, 5]
+};
+
+sum(1, 2, 3, 4, 5); // Output: [1, 2, 3, 4, 5]
+
+
+
+// <------ Spread operator ------->
 
 
