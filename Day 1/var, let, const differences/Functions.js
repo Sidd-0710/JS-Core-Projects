@@ -61,34 +61,45 @@ function sum(...args) {
 // <------ First class Function ------->
 
 
-function shout(msg) {
-return msg.toUpperCase();
-}
-function processMessage(fn) {
-console.log(fn("hello"));
-}
+// function shout(msg) {
+// return msg.toUpperCase();
+// }
+// function processMessage(fn) {
+// console.log(fn("hello"));
+// }
 // processMessage(shout);
 
 
 // <------ Higher-order functions ------->
 
-function createMultiplier(x) {
-return function (y) {
-return x * y;
-};
-}
-let double = createMultiplier(2);
-console.log(double(8)); // 16
+// function createMultiplier(x) {
+// return function (y) {
+// return x * y;
+// };
+// }
+// let double = createMultiplier(2);
+// console.log(double(8)); // 16
 
 // <------ Closures ------->
 
 
-function abcd(){
-    let a = 10;
-    return function() {
-        console.log(a);
-    }
+// function abcd(){
+//     let a = 10;
+//     return function() {
+//         console.log(a);
+//     }
+// }
+
+
+function abcd(val) {
+    val();
+
+
 }
+
+abcd(function() {
+    console.log("Hello, this is a closure!");
+});
 
 
 
