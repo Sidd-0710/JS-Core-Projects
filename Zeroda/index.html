@@ -3,115 +3,157 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zerodha - Modern Trading Platform</title>
+    <title>Zerodha - Online Stock Trading Platform</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <header class="header">
+    <!-- Header -->
+    <header>
+        <nav>
             <div class="logo">Zerodha</div>
-            <nav class="nav-menu">
-                <button class="nav-item active" onclick="switchTab('dashboard')">Dashboard</button>
-                <button class="nav-item" onclick="switchTab('orders')">Orders</button>
-                <button class="nav-item" onclick="switchTab('portfolio')">Portfolio</button>
-                <button class="nav-item" onclick="switchTab('funds')">Funds</button>
-            </nav>
-        </header>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#products">Products</a></li>
+                <li><a href="#pricing">Pricing</a></li>
+                <li><a href="#support">Support</a></li>
+                <li><a href="#about">About</a></li>
+            </ul>
+            <a href="#signup" class="cta-btn">Sign up for free</a>
+        </nav>
+    </header>
 
-        <main class="main-content">
-            <section class="trading-panel">
-                <h2 class="panel-title">Place Order</h2>
-                <form class="order-form" onsubmit="placeOrder(event)">
-                    <div class="form-group full-width">
-                        <div class="search-box">
-                            <input type="text" id="stock-search" placeholder="Search stocks..." onkeyup="searchStocks()" />
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1>Invest in everything</h1>
+                <p>Online platform to invest in stocks, derivatives, mutual funds, ETFs, bonds, and more.</p>
+                <a href="#signup" class="hero-cta">Sign up for free</a>
+            </div>
+            <div class="hero-visual">
+                <div class="trading-interface">
+                    <div class="chart-container">
+                        <canvas id="chartCanvas" width="400" height="250"></canvas>
+                    </div>
+                    <div class="stats">
+                        <div class="stat-item">
+                            <span class="stat-number" data-target="1600000">0</span>
+                            <span class="stat-label">Active Users</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number" data-target="600000">0</span>
+                            <span class="stat-label">Crores Invested</span>
                         </div>
                     </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="exchange">Exchange</label>
-                            <select id="exchange">
-                                <option value="NSE">NSE</option>
-                                <option value="BSE">BSE</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="product">Product</label>
-                            <select id="product">
-                                <option value="CNC">CNC</option>
-                                <option value="MIS">MIS</option>
-                                <option value="NRML">NRML</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="order-type">Order Type</label>
-                            <select id="order-type" onchange="togglePriceField()">
-                                <option value="MARKET">Market</option>
-                                <option value="LIMIT">Limit</option>
-                                <option value="SL">Stop Loss</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="quantity">Quantity</label>
-                            <input type="number" id="quantity" placeholder="0" min="1" required />
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="price">Price</label>
-                            <input type="number" id="price" placeholder="0.00" step="0.01" disabled />
-                        </div>
-                        <div class="form-group">
-                            <label for="validity">Validity</label>
-                            <select id="validity">
-                                <option value="DAY">Day</option>
-                                <option value="IOC">IOC</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="order-buttons">
-                        <button type="button" class="buy-btn" onclick="setOrderType('BUY')">Buy</button>
-                        <button type="button" class="sell-btn" onclick="setOrderType('SELL')">Sell</button>
-                    </div>
-                </form>
-            </section>
-
-            <section class="market-watch">
-                <h2 class="panel-title">
-                    Market Watch
-                    <div class="live-indicator">
-                        <div class="live-dot"></div>
-                        <span style="font-size: 12px; color: #4CAF50;">LIVE</span>
-                    </div>
-                </h2>
-                <div id="watchlist">
-                    <!-- Stock items will be populated by JavaScript -->
                 </div>
-            </section>
-        </main>
-
-        <div class="bottom-section">
-            <section class="portfolio">
-                <h2 class="panel-title">Portfolio Holdings</h2>
-                <div id="portfolio-list">
-                    <!-- Portfolio items will be populated by JavaScript -->
-                </div>
-            </section>
-
-            <section class="orders">
-                <h2 class="panel-title">Recent Orders</h2>
-                <div id="orders-list">
-                    <!-- Orders will be populated by JavaScript -->
-                </div>
-            </section>
+            </div>
         </div>
-    </div>
+        <div class="floating-elements">
+            <div class="float-element" style="top: 10%; left: 10%;">₹</div>
+            <div class="float-element" style="top: 20%; right: 15%;">📈</div>
+            <div class="float-element" style="bottom: 30%; left: 20%;">💰</div>
+            <div class="float-element" style="bottom: 15%; right: 25%;">📊</div>
+        </div>
+    </section>
+
+    <!-- Trust Section -->
+    <section class="trust-section">
+        <div class="container">
+            <h2>Trust with confidence</h2>
+            <div class="trust-grid">
+                <div class="trust-item">
+                    <h3>Customer-first always</h3>
+                    <p>That's why 1.6+ crore customers trust Zerodha with ~ ₹6 lakh crores of equity investments and contribute to 15% of daily retail exchange volumes in India.</p>
+                </div>
+                <div class="trust-item">
+                    <h3>No spam or gimmicks</h3>
+                    <p>No gimmicks, spam, "gamification", or annoying push notifications. High quality apps that you use at your pace, the way you like.</p>
+                </div>
+                <div class="trust-item">
+                    <h3>The Zerodha universe</h3>
+                    <p>Not just an app, but a whole ecosystem. Our investments in 30+ fintech startups offer you tailored services specific to your needs.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="pricing-section" id="pricing">
+        <div class="container">
+            <h2>Unbeatable pricing</h2>
+            <p class="section-subtitle">We pioneered the concept of discount broking and price transparency in India. Flat fees and no hidden charges.</p>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <h3>₹0</h3>
+                    <p>Free account opening</p>
+                </div>
+                <div class="pricing-card">
+                    <h3>₹0</h3>
+                    <p>Free equity delivery and direct mutual funds</p>
+                </div>
+                <div class="pricing-card">
+                    <h3>₹20</h3>
+                    <p>Intraday and F&O</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Education Section -->
+    <section class="education-section">
+        <div class="container">
+            <h2>Free and open market education</h2>
+            <div class="education-grid">
+                <div class="education-item">
+                    <h3>Varsity</h3>
+                    <p>The largest online stock market education book in the world covering everything from the basics to advanced trading.</p>
+                    <a href="#" class="learn-more">Learn more →</a>
+                </div>
+                <div class="education-item">
+                    <h3>TradingQ&A</h3>
+                    <p>The most active trading and investment community in India for all your market related queries.</p>
+                    <a href="#" class="learn-more">Learn more →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">Products</a></li>
+                        <li><a href="#">Pricing</a></li>
+                        <li><a href="#">Referral programme</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#">Contact us</a></li>
+                        <li><a href="#">Support portal</a></li>
+                        <li><a href="#">Z-Connect blog</a></li>
+                        <li><a href="#">List of charges</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Account</h4>
+                    <ul>
+                        <li><a href="#">Open an account</a></li>
+                        <li><a href="#">Fund transfer</a></li>
+                        <li><a href="#">60 day challenge</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Zerodha. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
 
     <script src="script.js"></script>
 </body>

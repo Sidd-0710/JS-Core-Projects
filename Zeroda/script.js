@@ -1,280 +1,296 @@
-// Sample data for demonstration
-const stocks = [
-    { symbol: 'RELIANCE', name: 'Reliance Industries', price: 2456.75, change: 2.3, changePercent: 0.94 },
-    { symbol: 'TCS', name: 'Tata Consultancy Services', price: 3234.50, change: -15.25, changePercent: -0.47 },
-    { symbol: 'INFY', name: 'Infosys Limited', price: 1543.20, change: 8.90, changePercent: 0.58 },
-    { symbol: 'HDFCBANK', name: 'HDFC Bank', price: 1678.45, change: 12.75, changePercent: 0.77 },
-    { symbol: 'ICICIBANK', name: 'ICICI Bank', price: 987.30, change: -5.60, changePercent: -0.56 },
-    { symbol: 'WIPRO', name: 'Wipro Limited', price: 432.85, change: 3.15, changePercent: 0.73 },
-    { symbol: 'ADANIPORTS', name: 'Adani Ports', price: 876.20, change: -8.45, changePercent: -0.96 },
-    { symbol: 'BAJFINANCE', name: 'Bajaj Finance', price: 6543.30, change: 45.60, changePercent: 0.70 }
-];
-
-const portfolio = [
-    { symbol: 'RELIANCE', qty: 10, avgPrice: 2400.00, ltp: 2456.75, pnl: 567.50 },
-    { symbol: 'TCS', qty: 5, avgPrice: 3250.00, ltp: 3234.50, pnl: -77.50 },
-    { symbol: 'INFY', qty: 15, avgPrice: 1520.00, ltp: 1543.20, pnl: 348.00 },
-    { symbol: 'HDFCBANK', qty: 8, avgPrice: 1650.00, ltp: 1678.45, pnl: 227.60 }
-];
-
-const orders = [
-    { symbol: 'HDFCBANK', type: 'BUY', qty: 5, price: 1678.45, status: 'EXECUTED', time: '10:30 AM' },
-    { symbol: 'WIPRO', type: 'SELL', qty: 10, price: 432.85, status: 'PENDING', time: '11:15 AM' },
-    { symbol: 'ICICIBANK', type: 'BUY', qty: 8, price: 987.30, status: 'EXECUTED', time: '09:45 AM' },
-    { symbol: 'RELIANCE', type: 'SELL', qty: 5, price: 2456.75, status: 'PENDING', time: '12:00 PM' }
-];
-
-let currentOrderType = 'BUY';
-let filteredStocks = stocks;
-
-// Initialize the application when DOM is loaded
+// Wait for DOM to be fully loaded
 document.addEventListener('DOMContentLoaded', function() {
-    init();
+    
+    // Header scroll effect
+    const header = document.querySelector('header');
+    
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 100) {
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
+    });
+
+    // Smooth scrolling for navigation links
+    const navLinks = document.querySelectorAll('a[href^="#"]');
+    
+    navLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            const targetId = this.getAttribute('href');
+            const targetSection = document.querySelector(targetId);
+            
+            if (targetSection) {
+                const offsetTop = targetSection.offsetTop - 80;
+                
+                window.scrollTo({
+                    top: offsetTop,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+
+    // Animated counter for statistics
+    function animateCounter(element, target, duration = 2000) {
+        const start = 0;
+        const startTime = performance.now();
+        
+        function updateCounter(currentTime) {
+            const elapsed = currentTime - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            
+            // Easing function for smooth animation
+            const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+            const current = Math.floor(start + (target - start) * easeOutQuart);
+            
+            element.textContent = current.toLocaleString();
+            
+            if (progress < 1) {
+                requestAnimationFrame(updateCounter);
+            } else {
+                element.textContent = target.toLocaleString();
+            }
+        }
+        
+        requestAnimationFrame(updateCounter);
+    }
+
+    // Intersection Observer for animations
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.animation = 'fadeInUp 0.8s ease forwards';
+                
+                // Animate counters when they come into view
+                if (entry.target.classList.contains('stat-number')) {
+                    const target = parseInt(entry.target.getAttribute('data-target'));
+                    animateCounter(entry.target, target);
+                }
+            }
+        });
+    }, observerOptions);
+
+    // Observe elements for animation
+    const animatedElements = document.querySelectorAll('.trust-item, .pricing-card, .education-item, .stat-number');
+    animatedElements.forEach(el => {
+        observer.observe(el);
+    });
+
+    // Dynamic chart drawing
+    function drawChart() {
+        const canvas = document.getElementById('chartCanvas');
+        if (!canvas) return;
+        
+        const ctx = canvas.getContext('2d');
+        const width = canvas.width;
+        const height = canvas.height;
+        
+        // Clear canvas
+        ctx.clearRect(0, 0, width, height);
+        
+        // Generate mock stock data
+        const dataPoints = 50;
+        const data = [];
+        let currentPrice = 100;
+        
+        for (let i = 0; i < dataPoints; i++) {
+            currentPrice += (Math.random() - 0.5) * 10;
+            currentPrice = Math.max(50, Math.min(150, currentPrice));
+            data.push(currentPrice);
+        }
+        
+        // Draw grid
+        ctx.strokeStyle = '#e9ecef';
+        ctx.lineWidth = 1;
+        
+        // Vertical grid lines
+        for (let i = 0; i <= 10; i++) {
+            const x = (i / 10) * width;
+            ctx.beginPath();
+            ctx.moveTo(x, 0);
+            ctx.lineTo(x, height);
+            ctx.stroke();
+        }
+        
+        // Horizontal grid lines
+        for (let i = 0; i <= 5; i++) {
+            const y = (i / 5) * height;
+            ctx.beginPath();
+            ctx.moveTo(0, y);
+            ctx.lineTo(width, y);
+            ctx.stroke();
+        }
+        
+        // Draw price line
+        ctx.strokeStyle = '#387ed1';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        
+        data.forEach((price, index) => {
+            const x = (index / (dataPoints - 1)) * width;
+            const y = height - ((price - 50) / 100) * height;
+            
+            if (index === 0) {
+                ctx.moveTo(x, y);
+            } else {
+                ctx.lineTo(x, y);
+            }
+        });
+        
+        ctx.stroke();
+        
+        // Draw area under the line
+        ctx.fillStyle = 'rgba(56, 126, 209, 0.1)';
+        ctx.lineTo(width, height);
+        ctx.lineTo(0, height);
+        ctx.closePath();
+        ctx.fill();
+        
+        // Add some animated dots
+        const currentTime = Date.now();
+        const dotCount = 3;
+        
+        for (let i = 0; i < dotCount; i++) {
+            const progress = ((currentTime / 1000) + i * 2) % dataPoints;
+            const index = Math.floor(progress);
+            const nextIndex = (index + 1) % dataPoints;
+            const fraction = progress - index;
+            
+            const price = data[index] + (data[nextIndex] - data[index]) * fraction;
+            const x = (progress / (dataPoints - 1)) * width;
+            const y = height - ((price - 50) / 100) * height;
+            
+            ctx.fillStyle = '#387ed1';
+            ctx.beginPath();
+            ctx.arc(x, y, 4, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Add glow effect
+            ctx.shadowColor = '#387ed1';
+            ctx.shadowBlur = 10;
+            ctx.beginPath();
+            ctx.arc(x, y, 2, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.shadowBlur = 0;
+        }
+    }
+    
+    // Initialize chart and update periodically
+    drawChart();
+    setInterval(drawChart, 100);
+
+    // Parallax effect for floating elements
+    window.addEventListener('scroll', () => {
+        const scrolled = window.pageYOffset;
+        const floatingElements = document.querySelectorAll('.float-element');
+        
+        floatingElements.forEach((element, index) => {
+            const speed = 0.5 + (index * 0.1);
+            const yPos = -(scrolled * speed);
+            element.style.transform = `translateY(${yPos}px)`;
+        });
+    });
+
+    // Add hover effects to cards
+    const cards = document.querySelectorAll('.trust-item, .pricing-card, .education-item');
+    
+    cards.forEach(card => {
+        card.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-10px) scale(1.02)';
+        });
+        
+        card.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0) scale(1)';
+        });
+    });
+
+    // Loading animation for the page
+    const body = document.body;
+    body.style.opacity = '0';
+    body.style.transition = 'opacity 0.5s ease';
+    
+    window.addEventListener('load', () => {
+        body.style.opacity = '1';
+    });
+
+    // Add click ripple effect to buttons
+    const buttons = document.querySelectorAll('.cta-btn, .hero-cta');
+    
+    buttons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            const ripple = document.createElement('span');
+            const rect = this.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            const x = e.clientX - rect.left - size / 2;
+            const y = e.clientY - rect.top - size / 2;
+            
+            ripple.style.width = ripple.style.height = size + 'px';
+            ripple.style.left = x + 'px';
+            ripple.style.top = y + 'px';
+            ripple.classList.add('ripple');
+            
+            this.appendChild(ripple);
+            
+            setTimeout(() => {
+                ripple.remove();
+            }, 600);
+        });
+    });
+
+    // Typewriter effect for hero text (optional enhancement)
+    function typeWriter(element, text, speed = 50) {
+        let i = 0;
+        element.textContent = '';
+        
+        function type() {
+            if (i < text.length) {
+                element.textContent += text.charAt(i);
+                i++;
+                setTimeout(type, speed);
+            }
+        }
+        
+        type();
+    }
+
+    // Initialize typewriter effect after a delay
+    setTimeout(() => {
+        const heroTitle = document.querySelector('.hero-text h1');
+        if (heroTitle) {
+            const originalText = heroTitle.textContent;
+            typeWriter(heroTitle, originalText, 100);
+        }
+    }, 1500);
 });
 
-// Main initialization function
-function init() {
-    renderWatchlist();
-    renderPortfolio();
-    renderOrders();
-    updatePricesLive();
-    
-    // Set default order type styling
-    setOrderType('BUY');
-    
-    console.log('Zerodha Trading Platform Initialized Successfully');
+// CSS for ripple effect (add to styles.css if needed)
+const rippleCSS = `
+.ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.6);
+    transform: scale(0);
+    animation: ripple-animation 0.6s linear;
+    pointer-events: none;
 }
 
-// Render watchlist with current stock data
-function renderWatchlist() {
-    const watchlist = document.getElementById('watchlist');
-    
-    if (!watchlist) return;
-    
-    watchlist.innerHTML = filteredStocks.map(stock => `
-        <div class="stock-item" onclick="selectStock('${stock.symbol}')">
-            <div class="stock-info">
-                <h4>${stock.symbol}</h4>
-                <p>${stock.name}</p>
-            </div>
-            <div class="stock-price">
-                <div class="price">₹${stock.price.toFixed(2)}</div>
-                <div class="change ${stock.change >= 0 ? 'positive' : 'negative'}">
-                    ${stock.change >= 0 ? '+' : ''}${stock.change.toFixed(2)} (${stock.changePercent.toFixed(2)}%)
-                </div>
-            </div>
-        </div>
-    `).join('');
-}
-
-// Render portfolio holdings
-function renderPortfolio() {
-    const portfolioList = document.getElementById('portfolio-list');
-    
-    if (!portfolioList) return;
-    
-    portfolioList.innerHTML = portfolio.map(item => {
-        const currentValue = item.qty * item.ltp;
-        const totalInvestment = item.qty * item.avgPrice;
-        const pnl = currentValue - totalInvestment;
-        const pnlPercent = ((pnl / totalInvestment) * 100).toFixed(2);
-        
-        return `
-            <div class="portfolio-item">
-                <div>
-                    <strong>${item.symbol}</strong>
-                    <div style="font-size: 12px; color: #666;">${item.qty} shares @ ₹${item.avgPrice.toFixed(2)}</div>
-                    <div style="font-size: 11px; color: #999;">Investment: ₹${totalInvestment.toFixed(2)}</div>
-                </div>
-                <div style="text-align: right;">
-                    <div>₹${item.ltp.toFixed(2)}</div>
-                    <div class="${pnl >= 0 ? 'positive' : 'negative'}" style="font-size: 12px;">
-                        ${pnl >= 0 ? '+' : ''}₹${pnl.toFixed(2)}
-                    </div>
-                    <div class="${pnl >= 0 ? 'positive' : 'negative'}" style="font-size: 10px;">
-                        (${pnlPercent}%)
-                    </div>
-                </div>
-            </div>
-        `;
-    }).join('');
-}
-
-// Render recent orders
-function renderOrders() {
-    const ordersList = document.getElementById('orders-list');
-    
-    if (!ordersList) return;
-    
-    ordersList.innerHTML = orders.map(order => `
-        <div class="order-item">
-            <div>
-                <strong>${order.symbol}</strong>
-                <div style="font-size: 12px; color: #666;">
-                    ${order.type} ${order.qty} @ ${typeof order.price === 'number' ? '₹' + order.price.toFixed(2) : order.price}
-                </div>
-                <div style="font-size: 11px; color: #999;">${order.time}</div>
-            </div>
-            <div style="text-align: right;">
-                <div class="status ${order.status.toLowerCase()}">${order.status}</div>
-            </div>
-        </div>
-    `).join('');
-}
-
-// Handle stock selection from watchlist
-function selectStock(symbol) {
-    const stockSearchInput = document.getElementById('stock-search');
-    const priceInput = document.getElementById('price');
-    
-    if (stockSearchInput) {
-        stockSearchInput.value = symbol;
-    }
-    
-    const stock = stocks.find(s => s.symbol === symbol);
-    if (stock && priceInput) {
-        priceInput.value = stock.price.toFixed(2);
-    }
-    
-    console.log(`Selected stock: ${symbol}`);
-}
-
-// Search functionality for stocks
-function searchStocks() {
-    const searchInput = document.getElementById('stock-search');
-    if (!searchInput) return;
-    
-    const searchTerm = searchInput.value.toLowerCase().trim();
-    
-    if (searchTerm === '') {
-        filteredStocks = stocks;
-    } else {
-        filteredStocks = stocks.filter(stock => 
-            stock.symbol.toLowerCase().includes(searchTerm) || 
-            stock.name.toLowerCase().includes(searchTerm)
-        );
-    }
-    
-    renderWatchlist();
-}
-
-// Toggle price field based on order type
-function togglePriceField() {
-    const orderTypeSelect = document.getElementById('order-type');
-    const priceField = document.getElementById('price');
-    
-    if (!orderTypeSelect || !priceField) return;
-    
-    const orderType = orderTypeSelect.value;
-    
-    if (orderType === 'MARKET') {
-        priceField.disabled = true;
-        priceField.value = '';
-        priceField.placeholder = 'Market Price';
-    } else {
-        priceField.disabled = false;
-        priceField.placeholder = '0.00';
+@keyframes ripple-animation {
+    to {
+        transform: scale(4);
+        opacity: 0;
     }
 }
+`;
 
-// Set order type (BUY/SELL) with visual feedback
-function setOrderType(type) {
-    currentOrderType = type;
-    
-    const buyBtn = document.querySelector('.buy-btn');
-    const sellBtn = document.querySelector('.sell-btn');
-    
-    if (!buyBtn || !sellBtn) return;
-    
-    // Reset both buttons
-    buyBtn.style.transform = 'scale(1)';
-    sellBtn.style.transform = 'scale(1)';
-    buyBtn.style.boxShadow = '';
-    sellBtn.style.boxShadow = '';
-    
-    // Highlight selected button
-    if (type === 'BUY') {
-        buyBtn.style.transform = 'scale(1.05)';
-        buyBtn.style.boxShadow = '0 5px 15px rgba(76, 175, 80, 0.4)';
-    } else {
-        sellBtn.style.transform = 'scale(1.05)';
-        sellBtn.style.boxShadow = '0 5px 15px rgba(244, 67, 54, 0.4)';
-    }
-    
-    console.log(`Order type set to: ${type}`);
-}
-
-// Handle order form submission
-function placeOrder(event) {
-    event.preventDefault();
-    
-    // Get form values
-    const stockSymbol = document.getElementById('stock-search')?.value.trim();
-    const exchange = document.getElementById('exchange')?.value;
-    const product = document.getElementById('product')?.value;
-    const orderType = document.getElementById('order-type')?.value;
-    const quantity = document.getElementById('quantity')?.value;
-    const price = document.getElementById('price')?.value;
-    const validity = document.getElementById('validity')?.value;
-    
-    // Validation
-    if (!stockSymbol) {
-        alert('Please enter a stock symbol');
-        return;
-    }
-    
-    if (!quantity || quantity <= 0) {
-        alert('Please enter a valid quantity');
-        return;
-    }
-    
-    if (orderType !== 'MARKET' && (!price || price <= 0)) {
-        alert('Please enter a valid price for limit orders');
-        return;
-    }
-    
-    // Check if stock exists
-    const stockExists = stocks.some(stock => stock.symbol.toUpperCase() === stockSymbol.toUpperCase());
-    if (!stockExists) {
-        alert('Stock not found in our database');
-        return;
-    }
-    
-    // Create new order
-    const newOrder = {
-        symbol: stockSymbol.toUpperCase(),
-        type: currentOrderType,
-        qty: parseInt(quantity),
-        price: orderType === 'MARKET' ? 'Market Price' : parseFloat(price),
-        status: 'PENDING',
-        time: new Date().toLocaleTimeString('en-US', { 
-            hour12: true, 
-            hour: '2-digit', 
-            minute: '2-digit' 
-        }),
-        exchange: exchange,
-        product: product,
-        validity: validity
-    };
-    
-    // Add to orders array
-    orders.unshift(newOrder);
-    
-    // Re-render orders
-    renderOrders();
-    
-    // Reset form
-    resetOrderForm();
-    
-    // Success message
-    const orderDetails = `${currentOrderType} ${quantity} shares of ${stockSymbol.toUpperCase()}`;
-    const priceDetails = orderType === 'MARKET' ? 'at Market Price' : `at ₹${price}`;
-    
-    alert(`Order placed successfully!\n${orderDetails} ${priceDetails}\nExchange: ${exchange}\nProduct: ${product}`);
-    
-    console.log('Order placed:', newOrder);
-}
-
-// Reset order form after successful submission
-function resetOrderForm() {
-    const form = docume
+// Add ripple CSS to the document
+const style = document.createElement('style');
+style.textContent = rippleCSS;
+document.head.appendChild(style);
